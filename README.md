@@ -1,34 +1,36 @@
 # OBJECTIFS
 * Comprendre l'organisation de fichiers linux et les utilités des repertoires importants dans le systeme de fichier.
-* Apprendre a vous reperez et a maitriser votre environnement shell
+* Apprendre a se reperez et a maitriser son environnement shell
 * Savoir agir dans votre environnement shell
 * Referencer des fichiers sous differents noms
 * Cheat Sheet des commandes basiques pour multifichiers sur bash
 
-# I/ Explication filesystem + points importants a savoir
+# I/ Explication filesystem
     
-## 1. termes a savoir
+## 1. Qu'est-ce qu'un systeme de fichier
 
-        Filesystem : designe l'organisation hierarchique des fichiers au sein d'un systeme d'exploitation
+        Filesystem : designe l'organisation hierarchique des fichiers au sein d'un systeme d'exploitation.
 
 Ces fichiers sont organisés en ce qu'on appelle une arborescence inversée.
 On part du dossier racine `/` pour descendre dans les branches de repertoires et sous repertoires.
-WARNING : `/` est aussi utilisé dans les noms de fichiers ou dossiers, il indique le chemin d'accès au fichier. ex : `/usr/bin` indique que le repertoire `bin` est dans le repertoire `usr` qui est lui même dans le repertoire `/`.
-Detail : les espaces dans les noms de fichiers peuvent entrainer lors de certaines commandes, de mauvaises interpretations de la commande en confondant une partie du nom avec un argument ou une option. Preferez des noms sans espace ou mettez des guillemets autours du nom.
 
-Notes : termes importants de descriptions de contenu fichiers ou repertoires
-- statique : le contenu ne change que s'il est modifié
+Le `/` est aussi utilisé dans les noms de fichiers ou dossiers, il indique le chemin d'accès au fichier. ex : `/usr/bin` indique que le repertoire `bin` est dans le repertoire `usr` qui est lui même dans le repertoire `/`.
+Faites attention lors de l'ecriture des noms de fichiers. les espaces dans les noms de fichiers peuvent entrainer lors de certaines commandes, de mauvaises interpretations de la commande en confondant une partie du nom avec un argument ou une option. Preferez des noms sans espace ou mettez des guillemets autours du nom.
+
+### 2. Vocabulaire :
+    Termes importants de descriptions de contenu fichiers ou repertoires
+- statique : le contenu ne change que s'il est modifié activement
 - dynamique ou variable : le contenu est modifier par des processus actifs
 - persistant : le contenu ne change pas meme au demarrage de l'ordinateur (fichiers de configurations)
 - execution : le contenu est specifique au processus ou au systeme, supprime lors d'un redemarrage
 
-    2. directories importants
+### 3. Repertoires importants
 
-/usr : ontient des fichiers exécutables et annexes pour de nombreux logiciels 
+/usr : contient des fichiers exécutables et annexes pour de nombreux logiciels 
     considérés comme faisant partie de la distribution concernée.
-    /usr/bin : commande user ??
-    /usr/sbin : commandes adminsys ??
-    /usr/local : logiciels personnalisé localement ??
+    /usr/bin : commande user essentielles, genre curl
+    /usr/sbin : commandes adminsys genre netstat
+    /usr/local : logiciels compilés et installés localement non liés au systeme
 
 /etc : Fichiers de config du systeme
 
@@ -60,7 +62,7 @@ Notes : termes importants de descriptions de contenu fichiers ou repertoires
     Répertoire initial : correspond à l'emplacement initial des processus systèmes
 
     Chemin absolu : correspond à l'emplacement exact des fichiers dans la hierarchie systeme en commencant par la racine `/`. ex : /usr/bin ou /var/log
-
+    
     Chemin relatif : correspond à l'emplacement d'un fichier depuis l'endroit où l'usr se situe.
     ex : l'utilisateur est dans son dossier /home qui contient le dossier Bureau où se situe le fichier photo.jpg. Le chemin pour accéder à la photo est Bureau/photo.jpg et non pas /home/Bureau/photo.jpg qui lui est le chemin absolu.
 
@@ -69,18 +71,18 @@ Notes : termes importants de descriptions de contenu fichiers ou repertoires
 
 ### 2. les commandes de navigation
 
-* `pwd` : permet de se localiser dans le systeme de fichier
+* `pwd` Print Working Directory : permet de se localiser dans le systeme de fichier
 
-* `ls` : liste le contenu du repertoire specifié si rien n'est specifié, liste le contenu du répertoire actuel.
+* `ls` List : liste le contenu du repertoire specifié si rien n'est specifié, liste le contenu du répertoire actuel.
 Options principales :
 
     * `ls -R` : liste tous les repertoires et sous repertoires
     * `ls -l` : liste tous les fichiers avec plus de details sur eux (date de creations, tailles, appartenance ...)
     * `ls -a` : liste tous les fichiers meme les fichiers cachés (.nomdefichier)
 
-> Remarque : le repertoire `.` deisgne notre repertoire actuel et `..` designe notre répertoire parent.
+> Remarque : le repertoire `.` designe notre repertoire actuel et `..` designe notre répertoire parent.
 
-* `cd` : permet de se deplacer dans le systeme de fichier à partir de notre emplaement actuel. Si rien n'est spécifié, cela nous deplacera dans notre *répertoire initial*
+* `cd` Change Directory : permet de se deplacer dans le systeme de fichier à partir de notre emplaement actuel. Si rien n'est spécifié, cela nous deplacera dans notre *répertoire initial*
     * `cd ..` : nous deplace dans le repertoire parent au notre.
     * `cd - ` : nous deplace dans le repertoire précédent
     * `cd . ` : ne nous deplace pas. le `.` signifie que c'est notre repertoire actuel
@@ -90,9 +92,9 @@ Options principales :
     * permet de créer des fichiers
 
 # III/ Gestions de fichiers
-# 1. les commandes de gestions de fichiers
+### 1. les commandes de gestions de fichiers
 
-* `mkdir` : créer un ou plusieurs répertoires
+* `mkdir` Make Directory : créer un ou plusieurs répertoires
     > `mkdir Projet1 Projet2`
 
     Elle échoue lorsque le repertoire en argument existe deja ou si on essaye de créer un sous repertoire dans un repertoire qui n'existe pas. L'option `-p` permet de creer les repertoires parents manquants.
@@ -128,7 +130,7 @@ $ ls Projet
     * Contrairement aux liens symboliques, ils ne peuvent pointer que vers un autre élément du même système de fichiers. `df` permet de voir les differents repertoires sur les differents systemes de fichier.
     * Ils ne peuvent pas pointer sur un repertoire
 
-Creation du lien symbolique :
+Creation du lien physique :
 ```
 $ ln text1.txt /tmp/txt2.txt
 $ ls -l
@@ -137,9 +139,9 @@ $ ls -l
 ```
 Le numero 2 derriere les fichiers indique qu'ils ont 2 liens physiques.
 ```
-$ ls -li
+$ ls -li text1.txt /tmp/txt2.txt
 667473 -rw-rw-r-- 2 cedric cedric 27 2011-11-11 08:22 text1.txt
-667473 -rw-rw-r-- 2 cedric cedric 27 2011-11-11 08:22 tmp/txt2.txt
+667473 -rw-rw-r-- 2 cedric cedric 27 2011-11-11 08:22 /tmp/txt2.txt
 ```
 `ls -li` permet de verifier que le numero d'inode est le meme pour chaque fichier et qu'ils sont liés en dur si c'est le cas.
 
@@ -181,9 +183,22 @@ Filtrage par motif :
 
 ### 2. Substitution de commandes
 
+C'est une technique shell permettant d'utiliser des commandes dans d'autres commandes.
+Elle permet d'etendre des resultats de sous commandes sous forme d'arguements, directement dans la commande de base.
 
+```
+$ echo Today is $(date +%A).
+Today is Wednesday.
+```
 
 # Conclusion
 
 Vous avez appris le fonctionnement global d'un systeme de fichier et comment creer, manipuler et supprimer les fichiers et repertoires a l'interieur du systeme de fichier.
 Vous avez egalement apris a creer des liens entre les noms.
+
+
+support :
+
+- schema filesysteme
+- exercice repertoire : melange nom de dossier et definitions dans un dossier
+- exercice cli nav : poser au tableau des commandes sans definitions et a la fin leur dire quil faut savoir par coeur
